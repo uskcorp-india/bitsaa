@@ -4,7 +4,7 @@ from utils.logger_factory import get_logger
 
 logger = get_logger(__name__)
 
-router = APIRouter(prefix="/user/booking", tags=['booking'])
+router = APIRouter(prefix="/booking", tags=['booking'])
 
 @router.get("/")
 async def find(request: Request):

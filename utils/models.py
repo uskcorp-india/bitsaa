@@ -1,9 +1,9 @@
 from enum import Enum
 
 class Model(Enum):
-    booking = "BOOKING"
+    reservation = "RESERVATION"
     registration = "REGISTRATION"
-    room = "ROOM"
+    resort = "RESORT"
 
 class Operation(Enum):
     CREATE = "CREATE"

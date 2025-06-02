@@ -1,5 +1,6 @@
 import dao.reservation_dao as reservation_dao
 import dao.registration_dao as registration_dao
+import dao.resort_dao as resort_dao
 
 # reservation process
 def create_reservation(reservation: dict):
@@ -26,3 +27,17 @@ def delete_registration(registration_id:str):
 
 def find_registration(registration_id:str):
     return  registration_dao.find(registration_id)
+
+#resort
+
+def create_resort(resort:dict):
+    return resort_dao.create(resort)
+
+def update_resort(resort:dict):
+    return resort_dao.update(resort)
+
+def delete_resort(resort_id:str):
+    return resort_dao.delete(resort_id)
+
+def find_resort(resort_id:str):
+    return  resort_dao.find(resort_id)

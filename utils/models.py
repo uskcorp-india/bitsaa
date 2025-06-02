@@ -1,7 +1,7 @@
 from enum import Enum
 
 class Model(Enum):
-    book = "BOOKING"
+    booking = "BOOKING"
     registration = "REGISTRATION"
     room = "ROOM"
 

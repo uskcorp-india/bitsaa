@@ -1,30 +1,30 @@
 import re
 from schema import Schema, And, Optional, SchemaError
-
+from utils.validator_utils import is_string_or_none
 def validate(booking: dict) -> dict:
     errors = []
 
     field_validators = {
-        'firstname': And(str, len, error="Field 'firstname' should be a non-empty string"),
-        'lastname': And(str, len, error="Field 'lastname' should be a non-empty string"),
-        'phone': And(str, len, lambda s: len(s) == 10 and s.isdigit(), error="Phone number must be a 10-digit number"),
-        'email': And(str, lambda s: bool(re.match(r'^[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.(?:com|in|co\.in)$', s)),error="Invalid email format"),
-        Optional('booking_id'): And(str, len, error="Field 'bookingId' should be a non-empty string"),
-        Optional('userId'): And(str, len, error="Field 'userId' should be a non-empty string"),
-        Optional('memberId'): And(str, len, error="Field 'memberId' should be a non-empty string"),
-        Optional('roomId'): And(str, len, error="Field 'roomId' should be a non-empty string"),
-        Optional('bookingDate'): And(str, len, error="Field 'bookingDate' should be a non-empty string"),
-        Optional('startTime'): And(str, len, error="Field 'startTime' should be a non-empty string"),
-        Optional('endTime'): And(str, len, error="Field 'endTime' should be a non-empty string"),
-        Optional('purpose'): And(str, len, error="Field 'purpose' should be a non-empty string"),
-        Optional('status'): And(str, len, error="Field 'status' should be a non-empty string"),
-        Optional('id'): And(str, len, error="Field 'id' should be a non-empty string"),
-        Optional('created_at'): And(str, len, error="Field 'created_at' should be a non-empty string"),
-        Optional('updated_at'): And(str, len, error="Field 'updated_at' should be a non-empty string"),
-        Optional('address'): And(str, len, error="Field 'address' should be a non-empty string"),
-        Optional('dob'): And(str, len, error="Field 'dob' should be a non-empty string"),
-        Optional('gender'): And(str, len, error="Field 'gender' should be a non-empty string"),
-        Optional('alias'): And(str, len, error="Field 'alias' should be a non-empty string"),
+        Optional('firstname'): And(str, len, error="Field 'firstname' should be a non-empty string"),
+        Optional('lastname'): And(is_string_or_none, len, error="Field 'lastname' should be a non-empty string"),
+        Optional('phone'): And(is_string_or_none, len, lambda s: len(s) == 10 and s.isdigit(), error="Phone number must be a 10-digit number"),
+        Optional('email'): And(is_string_or_none, lambda s: bool(re.match(r'^[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.(?:com|in|co\.in)$', s)),error="Invalid email format"),
+        'booking_id': And(is_string_or_none, len, error="Field 'bookingId' should be a non-empty string"),
+        Optional('userId'): And(is_string_or_none, len, error="Field 'userId' should be a non-empty string"),
+        Optional('memberId'): And(is_string_or_none, len, error="Field 'memberId' should be a non-empty string"),
+        Optional('roomId'): And(is_string_or_none, len, error="Field 'roomId' should be a non-empty string"),
+        Optional('bookingDate'): And(is_string_or_none, len, error="Field 'bookingDate' should be a non-empty string"),
+        Optional('startTime'): And(is_string_or_none, len, error="Field 'startTime' should be a non-empty string"),
+        Optional('endTime'): And(is_string_or_none, len, error="Field 'endTime' should be a non-empty string"),
+        Optional('purpose'): And(is_string_or_none, len, error="Field 'purpose' should be a non-empty string"),
+        Optional('status'): And(is_string_or_none, len, error="Field 'status' should be a non-empty string"),
+        Optional('id'): And(is_string_or_none, len, error="Field 'id' should be a non-empty string"),
+        Optional('created_at'): And(is_string_or_none, len, error="Field 'created_at' should be a non-empty string"),
+        Optional('updated_at'): And(is_string_or_none, len, error="Field 'updated_at' should be a non-empty string"),
+        Optional('address'): And(is_string_or_none, len, error="Field 'address' should be a non-empty string"),
+        Optional('dob'): And(is_string_or_none, len, error="Field 'dob' should be a non-empty string"),
+        Optional('gender'): And(is_string_or_none, len, error="Field 'gender' should be a non-empty string"),
+        Optional('alias'): And(is_string_or_none, len, error="Field 'alias' should be a non-empty string"),
     }
 
     validated_booking = {}

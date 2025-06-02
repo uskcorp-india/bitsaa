@@ -7,7 +7,7 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/user/booking", tags=['booking'])
 
 @router.get("/")
-async def get(request: Request):
+async def find(request: Request):
     request_body = await request.json()
     booking = booking_handler.find(request_body.get('booking_id'))
     if booking:

@@ -16,8 +16,8 @@ async def find(request: Request):
 
 @router.post("/")
 async def create(request: Request):
-    body = await request.json()
-    created_reservation = reservation_handler.create(body)
+    request_body = await request.json()
+    created_reservation = reservation_handler.create(request_body)
     logger.info(created_reservation)
     if created_reservation:
         return created_reservation
@@ -25,8 +25,8 @@ async def create(request: Request):
 
 @router.put("/")
 async def update(request: Request):
-    body = await request.json()
-    updated_reservation = reservation_handler.update( body)
+    request_body = await request.json()
+    updated_reservation = reservation_handler.update(request_body)
     if updated_reservation:
         return updated_reservation
     raise HTTPException(status_code=400, detail="Failed to update reservation")

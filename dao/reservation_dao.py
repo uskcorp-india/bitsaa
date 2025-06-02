@@ -6,12 +6,12 @@ from utils.dao_utils import from_attributes_to_json
 
 logger = get_logger(__name__)
 @with_connection
-def create(dynamodb, reservation_id_data:dict):
-    reservation_id_data = reservation_id_data | build_record()
+def create(dynamodb, reservation_id:dict):
+    reservation_id = reservation_id | build_record()
     table = dynamodb.Table(common.RESERVATION)
-    table.put_item(Item=reservation_id_data)
-    logger.info("Created booking successfully")
-    return reservation_id_data
+    table.put_item(Item=reservation_id)
+    logger.info("Created reservation successfully")
+    return reservation_id
 
 @with_connection
 def find(dynamodb, reservation_id: str):
@@ -20,7 +20,7 @@ def find(dynamodb, reservation_id: str):
     if "Item" in response:
         return from_attributes_to_json(response["Item"])
     else:
-        raise ValueError(f"User not found with ID: {reservation_id}")
+        raise ValueError(f"reservation not found with ID: {reservation_id}")
 
 @with_connection
 def update(dynamodb, reservation: dict):

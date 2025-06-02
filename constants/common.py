@@ -1,4 +1,4 @@
 # tables
-BOOKING = 'booking'
+RESERVATION = 'reservation'
 REGISTRATION='registration'
 ROOM='room'

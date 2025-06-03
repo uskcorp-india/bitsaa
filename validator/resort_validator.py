@@ -1,14 +1,11 @@
-from typing import Optional
-
-from fastapi.openapi.models import Schema
-from pydantic_core import SchemaError
-
+from schema import Schema, And, Optional, SchemaError
 from utils.validator_utils import is_string_or_none
+
 def validate(resort: dict) -> dict:
     errors = []
 
     field_validators = {
-        'id': And(is_string_or_none, len, error="Field 'id' must be a non-empty string"),
+        Optional('id'): And(is_string_or_none, len, error="Field 'id' must be a non-empty string"),
         'name': And(is_string_or_none, len, error="Field 'name' must be a non-empty string"),
         'address': And(is_string_or_none, len, error="Field 'address' must be a non-empty string"),
         'phone': And(is_string_or_none, lambda s: s.isdigit() and len(s) == 10, error="Phone number must be a 10-digit number"),

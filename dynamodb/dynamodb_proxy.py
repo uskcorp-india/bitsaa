@@ -41,3 +41,6 @@ def delete_resort(resort_id:str):
 
 def find_resort(resort_id:str):
     return  resort_dao.find(resort_id)
+
+def find_all_resorts():
+    return resort_dao.find_all()

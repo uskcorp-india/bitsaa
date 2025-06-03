@@ -1,4 +1,8 @@
-from schema import Schema, And, Optional, SchemaError
+from typing import Optional
+
+from fastapi.openapi.models import Schema
+from pydantic_core import SchemaError
+
 from utils.validator_utils import is_string_or_none
 def validate(resort: dict) -> dict:
     errors = []

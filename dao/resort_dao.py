@@ -43,7 +43,7 @@ def update(dynamodb, resort: dict):
 
 @with_connection
 def delete(dynamodb, resort_id: str):
-    table = dynamodb.Table(common.resort)
+    table = dynamodb.Table(common.RESORT)
     table.delete_item(Key={"id": resort_id})
     logger.info(f"Deleted {common.RESORT} successfully '{resort_id}'")
     return {"action_type": f"{common.RESORT} deleted", "id": resort_id}

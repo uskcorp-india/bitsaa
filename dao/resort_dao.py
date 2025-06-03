@@ -23,6 +23,18 @@ def find(dynamodb, resort_id: str):
         raise ValueError(f"resort not found with ID: {resort_id}")
 
 @with_connection
+def find_all(dynamodb):
+    table = dynamodb.Table(common.RESORT)
+    response = table.scan()  # Scan reads all items (not efficient for large tables)
+    data = response.get("Items", [])
+
+    while "LastEvaluatedKey" in response:
+        response = table.scan(ExclusiveStartKey=response["LastEvaluatedKey"])
+        data.extend(response.get("Items", []))
+
+    return data
+
+@with_connection
 def update(dynamodb, resort: dict):
     table = dynamodb.Table(common.RESORT)
     resort = resort | build_record()

@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 import handler.resort_handler as resort_handler
 from utils.logger_factory import get_logger
-
 logger = get_logger(__name__)
 
 router = APIRouter(prefix="/resort", tags=['resort'])
@@ -17,7 +16,7 @@ async def find(request: Request):
 @router.post("")
 async def create(request: Request):
     request_body = await request.json()
-    created_resort =resort_handler.create(request_body)
+    created_resort = resort_handler.create(request_body)
     logger.info(created_resort)
     if created_resort:
         return created_resort

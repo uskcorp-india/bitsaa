@@ -6,7 +6,7 @@ logger = get_logger(__name__)
 
 router = APIRouter(prefix="/reservation", tags=['reservation'])
 
-@router.get("/")
+@router.get("")
 async def find(request: Request):
     request_body = await request.json()
     reservation = reservation_handler.find(request_body.get('reservation_id'))
@@ -14,7 +14,7 @@ async def find(request: Request):
         return reservation
     raise HTTPException(status_code=404, detail="reservation s not found")
 
-@router.post("/")
+@router.post("")
 async def create(request: Request):
     request_body = await request.json()
     created_reservation = reservation_handler.create(request_body)
@@ -23,7 +23,7 @@ async def create(request: Request):
         return created_reservation
     raise HTTPException(status_code=400, detail="Failed to create reservation")
 
-@router.put("/")
+@router.put("")
 async def update(request: Request):
     request_body = await request.json()
     updated_reservation = reservation_handler.update(request_body)
@@ -31,7 +31,7 @@ async def update(request: Request):
         return updated_reservation
     raise HTTPException(status_code=400, detail="Failed to update reservation")
 
-@router.delete("/")
+@router.delete("")
 async def delete(request: Request):
     request_body = await request.json()
     deleted_reservation = reservation_handler.delete(request_body.get('reservation_id'))

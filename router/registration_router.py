@@ -6,7 +6,7 @@ logger = get_logger(__name__)
 
 router = APIRouter(prefix="/registration", tags=['registration'])
 
-@router.get("/")
+@router.get("")
 async def find(request: Request):
     request_body = await request.json()
     registration = registration_handler.find(request_body.get('registration_id'))
@@ -14,7 +14,7 @@ async def find(request: Request):
         return registration
     raise HTTPException(status_code=404, detail="registration s not found")
 
-@router.post("/")
+@router.post("")
 async def create(request: Request):
     request_body = await request.json()
     create_registration = registration_handler.create(request_body)
@@ -23,7 +23,7 @@ async def create(request: Request):
         return create_registration
     raise HTTPException(status_code=400, detail="Failed to create registration")
 
-@router.put("/")
+@router.put("")
 async def update(request: Request):
     request_body = await request.json()
     updated_registration = registration_handler.update(request_body)
@@ -31,7 +31,7 @@ async def update(request: Request):
         return registration_handler
     raise HTTPException(status_code=400, detail="Failed to update registration")
 
-@router.delete("/")
+@router.delete("")
 async def delete(request: Request):
     request_body = await request.json()
     deleted_registration = registration_handler.delete(request_body.get('registration_id'))

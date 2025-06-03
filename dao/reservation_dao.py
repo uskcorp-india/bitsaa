@@ -8,14 +8,14 @@ logger = get_logger(__name__)
 @with_connection
 def create(dynamodb, reservation_id:dict):
     reservation_id = reservation_id | build_record()
-    table = dynamodb.Table(common.RESORT)
+    table = dynamodb.Table(common.RESERVATION)
     table.put_item(Item=reservation_id)
     logger.info("Created reservation successfully")
     return reservation_id
 
 @with_connection
 def find(dynamodb, reservation_id: str):
-    table = dynamodb.Table(common.RESORT)
+    table = dynamodb.Table(common.RESERVATION)
     response = table.get_item(Key={"id": reservation_id})
     if "Item" in response:
         return from_attributes_to_json(response["Item"])
@@ -24,7 +24,7 @@ def find(dynamodb, reservation_id: str):
 
 @with_connection
 def update(dynamodb, reservation: dict):
-    table = dynamodb.Table(common.RESORT)
+    table = dynamodb.Table(common.RESERVATION)
     reservation = reservation | build_record()
     update_fields = {k: v for k, v in reservation.items() if k != 'id'}
     update_expr = "SET " + ", ".join(f"#{k} = :{k}" for k in update_fields)
@@ -43,7 +43,7 @@ def update(dynamodb, reservation: dict):
 
 @with_connection
 def delete(dynamodb, reservation_id: str):
-    table = dynamodb.Table(common.RESORT)
+    table = dynamodb.Table(common.RESERVATION)
     table.delete_item(Key={"id": reservation_id})
-    logger.info(f"Deleted {common.RESORT} successfully '{reservation_id}'")
-    return {"action_type": f"{common.RESORT} deleted", "id": reservation_id}
+    logger.info(f"Deleted {common.RESERVATION} successfully '{reservation_id}'")
+    return {"action_type": f"{common.RESERVATION} deleted", "id": reservation_id}

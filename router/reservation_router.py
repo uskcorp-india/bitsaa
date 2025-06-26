@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter,HTTPException,Request
 import handler.reservation_handler as reservation_handler
 from utils.logger_factory import get_logger
 
@@ -6,10 +6,9 @@ logger = get_logger(__name__)
 
 router = APIRouter(prefix="/reservation", tags=['reservation'])
 
-@router.get("")
-async def find(request: Request):
-    request_body = await request.json()
-    reservation = reservation_handler.find(request_body.get('reservation_id'))
+@router.get("/{reservation_id}")
+async def find(reservation_id):
+    reservation = reservation_handler.find(reservation_id)
     if reservation:
         return reservation
     raise HTTPException(status_code=404, detail="reservation s not found")
@@ -23,10 +22,10 @@ async def create(request: Request):
         return created_reservation
     raise HTTPException(status_code=400, detail="Failed to create reservation")
 
-@router.put("")
-async def update(request: Request):
+@router.put("/{reservation_id}")
+async def update(reservation_id,request: Request):
     request_body = await request.json()
-    updated_reservation = reservation_handler.update(request_body)
+    updated_reservation = reservation_handler.update(reservation_id,request_body)
     if updated_reservation:
         return updated_reservation
     raise HTTPException(status_code=400, detail="Failed to update reservation")

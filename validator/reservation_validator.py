@@ -4,14 +4,13 @@ def validate(reservation: dict) -> dict:
     errors = []
 
     field_validators = {
-        Optional('booking_id'): And(is_string_or_none, len, error="Field 'bookingId' should be a non-empty string"),
+        Optional('reservation_id'): And(is_string_or_none, len, error="Field 'reservation_id' should be a non-empty string"),
         Optional('resort'): And(dict, len, error="Field 'created_at' should be a non-empty string"),
-        Optional('registration'): And(dict, len, error="Field 'fullName' should be a non-empty string"),
-        Optional('check_in'): And(is_string_or_none, len, error="Field 'startTime' should be a non-empty string"),
-        Optional('check_out'): And(is_string_or_none, len, error="Field 'endTime' should be a non-empty string"),
+        Optional('registration'): And(list, len, error="Field 'registration' should be a list"),
         Optional('status'): And(is_string_or_none, len, error="Field 'status' should be a non-empty string"),
         Optional('transaction_id'): And(is_string_or_none, len, error="Field 'id' should be a non-empty string"),
         Optional('created_at'): And(is_string_or_none, len, error="Field 'created_at' should be a non-empty string"),
+        Optional('extra_bed'):And(bool, error="Field should be type of bool")
 
     }
 

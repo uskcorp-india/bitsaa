@@ -8,26 +8,38 @@ logger = get_logger(__name__)
 def create(registration: dict):
     validated_registration = validator.validate(registration)
     logger.info(f'registration details: {registration}')
-
     if 'errors' in validated_registration:
         return build_response(validated_registration['errors'],400)
     else:
-        response = db.create_registration(registration)
+        response = db.create_registration(validated_registration)
         return build_response(response,'registration Created Successfully')
+
 
 def find(registration_id: str):
     response = db.find_registration(registration_id)
+    if "Item" in response:
+        if response['Item'].get('reservation_id'):
+            logger.info(response)
+            return build_response({}, "Registration already completed")
+        return build_response(response['Item'],"registration Found Successfully")
+    else:
+        logger.info(response)
+        return build_response({},"registration not Found Successfully")
+
+
+def registration_exists(registration_id: str):
+    response = db.registration_exists(registration_id)
     logger.info(response)
     return build_response(response,"registration Found Successfully")
 
-def update(registration: dict):
+def update(registration_id: str,registration: dict):
     validated_registration = validator.validate(registration)
     logger.info(f'Updating customer details: {registration}')
 
     if 'errors' in validated_registration:
         return build_response(validated_registration['errors'], 400)
     else:
-        response = db.update_registration(registration)
+        response = db.update_registration(registration_id,registration)
         return build_response(response, 'registration Updated Successfully')
 
 def delete(registration_id:str):

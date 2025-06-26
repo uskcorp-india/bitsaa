@@ -6,8 +6,8 @@ def validate(registration: dict) -> dict:
     errors = []
 
     field_validators = {
-        Optional('registration_no'):And(is_string_or_none, len, error="Field 'fullName' should be a non-empty string"),
-        Optional('booking_id'): And(is_string_or_none, len, error="Field 'bookingDate' should be a non-empty string"),
+        Optional('registration_no'):And(is_string_or_none, len, error="Field 'registration_no' should be a non-empty string"),
+        Optional('reservation_id'): And(is_string_or_none, len, error="Field 'reservation_id' should be a non-empty string"),
         Optional('fullName'): And(is_string_or_none, len, error="Field 'fullName' should be a non-empty string"),
         Optional('email'): And(is_string_or_none, lambda s: bool(re.match(
             r'^[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.(?:com|in|co\.in)$', s

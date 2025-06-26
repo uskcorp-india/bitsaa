@@ -5,7 +5,6 @@ from utils.utils import generate_uuid
 def build_record():
     return {
         "id": generate_uuid(),
-        "status": True,
         "created_at": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
 

@@ -11,7 +11,7 @@ async def find(reservation_id):
     reservation = reservation_handler.find(reservation_id)
     if reservation:
         return reservation
-    raise HTTPException(status_code=404, detail="reservation s not found")
+    raise HTTPException(status_code=404, detail="reservation not found")
 
 @router.post("")
 async def create(request: Request):

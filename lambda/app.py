@@ -43,15 +43,12 @@ async def catch_all(request: Request, proxy_path: str):
         "data": None
     }
 
-EXPECTED_API_KEY = "aB3!k9Lm@zR5qX7wP2eT8vY4dF6#rT1$gH5^VcL9mNpQ2rT8uLz#qW3eXpL9tR6yEwD2mX8qZsT8$mQ#vLp9ZdE7rT2yU5iO0jH7*qN3pVzL9tR6yEwD2mX8q"
+EXPECTED_API_KEY = os.getenv("EXPECTED_API_KEY", "fallback-test-key-if-not-set")
 
 @app.middleware("http")
 async def validate_api_key(request: Request, call_next):
-    excluded_routes = []
-
-    if request.url.path in excluded_routes:
+    if request.url.path == "/registration" and request.method == "POST":
         return await call_next(request)
-
     api_key = request.headers.get("x-api-key")
     if not api_key or api_key != EXPECTED_API_KEY:
         logger.warning(f"Unauthorized request: Invalid or missing API key - {api_key}")

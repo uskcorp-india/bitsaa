@@ -1,10 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: bitsa
+Description: bitsa - API Gateway + Lambda + Tikkl Signature Authorizer
 
 Globals:
   Function:
     Timeout: 500
+    Runtime: python3.12
+    Architectures:
+      - x86_64
+    MemorySize: 256
 
 Parameters:
   Stage:
@@ -23,6 +27,7 @@ Parameters:
     Description: IAM Role ARN for Lambda execution
 
 Resources:
+
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -30,8 +35,68 @@ Resources:
       StageName: !Ref Stage
       Cors:
         AllowMethods: "'GET, POST, PUT, DELETE, OPTIONS'"
-        AllowHeaders: "'AUTHORIZATION, Content-Type, X-Amz-Date, X-Api-Key, X-Amz-Security-Token, X-Amz-User-Agent'"
+        AllowHeaders: "'AUTHORIZATION, Content-Type, X-Amz-Date, X-Api-Key, X-Amz-Security-Token, X-Amz-User-Agent, X-Tikkl-Signature'"
         AllowOrigin: "'*'"
+      Auth:
+        Authorizers:
+          TikklSignatureAuthorizer:
+            FunctionArn: !GetAtt TikklSignatureAuthorizer.Arn
+            Identity:
+              Headers:
+                - X-Tikkl-Signature
+
+  TikklSignatureAuthorizer:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: tikkl-authorizer
+      Handler: lambda.authorizer.lambda_handler
+      Runtime: python3.12
+      Role: !Ref LambdaRoleArn
+      Environment:
+        Variables:
+          TIKKL_SECRET: "Di47eNI06-d410BF-85I4t9D6424m0sz3h1LmPVv5W8"
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+  UserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "bits-app-user"
+      Handler: lambda.app.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Environment:
+        Variables:
+          TZ: Asia/Kolkata
+          STAGE: !Ref Stage
+      Events:
+        BitsaaApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{proxy+}
+            Method: ANY
+        CreateRegistration:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /registration
+            Method: POST
+            Auth:
+              Authorizer: TikklSignatureAuthorizer
+
+  EmailFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "bits-app-email"
+      Handler: lambda.email.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Environment:
+        Variables:
+          TZ: Asia/Kolkata
+          IMAP_SERVER: "mail.uskcorp.in"
+          IMAP_PORT: "993"
+          EMAIL_USER: "hr@uskcorp.in"
+          EMAIL_PASSWORD: "Infosys@123"
 
   CloudWatchPolicy:
     Type: AWS::IAM::Policy
@@ -48,48 +113,6 @@ Resources:
               - logs:CreateLogStream
               - logs:PutLogEvents
             Resource: "arn:aws:logs:*:*:*"
-
-  UserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub "bits-app-user"
-      Handler: lambda.app.lambda_handler
-      Runtime: python3.12
-      Role: !Ref LambdaRoleArn
-      Architectures:
-        - x86_64
-      MemorySize: 256
-      Timeout: 500
-      Environment:
-        Variables:
-          TZ: Asia/Kolkata
-          STAGE: !Ref Stage
-      Events:
-        BitsaaApi:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGateway
-            Path: /{proxy+}
-            Method: ANY
-
-  EmailFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub "bits-app-email"
-      Handler: lambda.email.lambda_handler
-      Runtime: python3.12
-      Role: !Ref LambdaRoleArn
-      Architectures:
-        - x86_64
-      MemorySize: 256
-      Timeout: 500
-      Environment:
-        Variables:
-          TZ: Asia/Kolkata
-          IMAP_SERVER: "mail.uskcorp.in"
-          IMAP_PORT: "993"
-          EMAIL_USER: "hr@uskcorp.in"
-          EMAIL_PASSWORD: "Infosys@123"
 
 Outputs:
   UserFunctionApi:

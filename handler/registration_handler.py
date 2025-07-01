@@ -24,7 +24,7 @@ def find(registration_id: str):
         return build_response(response['Item'],"registration Found Successfully")
     else:
         logger.info(response)
-        return build_response({},"registration not Found Successfully")
+        return build_response({},"registration not Found")
 
 
 def registration_exists(registration_id: str):

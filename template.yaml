@@ -48,13 +48,14 @@ Resources:
   TikklSignatureAuthorizer:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: tikkl-authorizer
+      FunctionName: !Sub "tikkl-authorizer"
       Handler: lambda.authorizer.lambda_handler
-      Runtime: python3.12
       Role: !Ref LambdaRoleArn
       Environment:
         Variables:
           TIKKL_SECRET: "Di47eNI06-d410BF-85I4t9D6424m0sz3h1LmPVv5W8"
+          TZ: Asia/Kolkata
+          STAGE: !Ref Stage
       Policies:
         - AWSLambdaBasicExecutionRole
 
@@ -68,21 +69,22 @@ Resources:
         Variables:
           TZ: Asia/Kolkata
           STAGE: !Ref Stage
+          EXPECTED_API_KEY: "aB3!k9Lm@zR5qX7wP2eT8vY4dF6#rT1$gH5^VcL9mNpQ2rT8uLz#qW3eXpL9tR6yEwD2mX8qZsT8$mQ#vLp9ZdE7rT2yU5iO0jH7*qN3pVzL9tR6yEwD2mX8q"
+          X_Tikkl_Signature: "Di47eNI06-d410BF-85I4t9D6424m0sz3h1LmPVv5W8"
       Events:
-        BitsaaApi:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGateway
-            Path: /{proxy+}
-            Method: ANY
         CreateRegistration:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
             Path: /registration
             Method: POST
-            Auth:
-              Authorizer: TikklSignatureAuthorizer
+        BitsaaApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{proxy+}
+            Method: ANY
+
 
   EmailFunction:
     Type: AWS::Serverless::Function

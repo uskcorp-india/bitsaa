@@ -44,11 +44,14 @@ async def catch_all(request: Request, proxy_path: str):
     }
 
 EXPECTED_API_KEY = os.getenv("EXPECTED_API_KEY", "fallback-test-key-if-not-set")
+X_Tikkl_Signature = os.getenv("X_Tikkl_Signature","")
 
 @app.middleware("http")
 async def validate_api_key(request: Request, call_next):
     if request.url.path == "/registration" and request.method == "POST":
-        return await call_next(request)
+        key = request.headers.get("X-Tikkl-Signature")
+        if key == X_Tikkl_Signature:
+            return await call_next(request)
     api_key = request.headers.get("x-api-key")
     if not api_key or api_key != EXPECTED_API_KEY:
         logger.warning(f"Unauthorized request: Invalid or missing API key - {api_key}")
@@ -65,7 +68,7 @@ async def validate_api_key(request: Request, call_next):
     return await call_next(request)
 
 def lambda_handler(event, context):
-    logger.info(f"Received event: {json.dumps(event, indent=2)}")
+    print(f"Received event: {json.dumps(event, indent=2)}")
     try:
         response = handler(event, context)
         logger.info(f"Raw response from Mangum: {json.dumps(response, indent=2)}")

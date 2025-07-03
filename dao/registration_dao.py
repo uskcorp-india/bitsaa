@@ -7,12 +7,12 @@ from utils.dao_utils import from_attributes_to_json
 logger = get_logger(__name__)
 @with_connection
 def create(dynamodb, registration_data:dict):
-    logger.info(f"response: {registration_data}")
+    print(f"response: {registration_data}")
     registration_data['id'] = registration_data['registration_no']
     registration_data['created_at'] = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     table = dynamodb.Table(common.REGISTRATION)
     table.put_item(Item=registration_data)
-    logger.info("Created registration successfully")
+    print("Created registration successfully")
     return registration_data
 
 @with_connection

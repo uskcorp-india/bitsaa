@@ -18,7 +18,7 @@ async def find(registration_id):
 async def create(request: Request):
     request_body = await request.json()
     print(f"request_body++: {request_body}" )
-    request_body['registration_no'] = request_body.get("ticket_id")
+    request_body['registration_no'] = request_body.get("ticketId")
     create_registration = registration_handler.create(request_body)
     logger.info(create_registration)
     if create_registration:

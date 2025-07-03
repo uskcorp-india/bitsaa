@@ -10,7 +10,7 @@ from router.registration_router import router as registration_router
 from router.confirm_router import router as confirm_router
 from fastapi.responses import JSONResponse
 
-
+from utils.authorizer import is_valid_tikkl_signature
 from utils.logger_factory import get_logger
 
 logger = get_logger(__name__)
@@ -49,8 +49,11 @@ X_Tikkl_Signature = os.getenv("X_Tikkl_Signature","")
 @app.middleware("http")
 async def validate_api_key(request: Request, call_next):
     if request.url.path == "/registration" and request.method == "POST":
-        key = request.headers.get("X-Tikkl-Signature")
-        if key == X_Tikkl_Signature:
+        signature = request.headers.get("X-Tikkl-Signature")
+
+        body = await request.body()
+        is_base64 = False
+        if signature and is_valid_tikkl_signature(signature, body, is_base64):
             return await call_next(request)
         else:
             return JSONResponse(
@@ -62,22 +65,19 @@ async def validate_api_key(request: Request, call_next):
                     "data": None
                 }
             )
-    else:
-        api_key = request.headers.get("x-api-key")
-        if not api_key or api_key != EXPECTED_API_KEY:
-            logger.warning(f"Unauthorized request: Invalid or missing API key - {api_key}")
-            return JSONResponse(
-                status_code=403,
-                content={
-                    "status": False,
-                    "message": "Forbidden: Invalid API Key",
-                    "status_code": 403,
-                    "data": None
-                }
-            )
-        else:
-            return await call_next(request)
+    api_key = request.headers.get("x-api-key")
+    if not api_key or api_key != EXPECTED_API_KEY:
+        return JSONResponse(
+            status_code=403,
+            content={
+                "status": False,
+                "message": "Forbidden: Invalid API Key",
+                "status_code": 403,
+                "data": None
+            }
+        )
 
+    return await call_next(request)
 
 def lambda_handler(event, context):
     print(f"Received event: {json.dumps(event, indent=2)}")

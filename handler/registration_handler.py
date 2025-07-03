@@ -7,7 +7,7 @@ logger = get_logger(__name__)
 
 def create(registration: dict):
     validated_registration = validator.validate(registration)
-    logger.info(f'registration details: {registration}')
+    print(f'registration details: {registration}')
     if 'errors' in validated_registration:
         return build_response(validated_registration['errors'],400)
     else:

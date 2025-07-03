@@ -52,20 +52,32 @@ async def validate_api_key(request: Request, call_next):
         key = request.headers.get("X-Tikkl-Signature")
         if key == X_Tikkl_Signature:
             return await call_next(request)
-    api_key = request.headers.get("x-api-key")
-    if not api_key or api_key != EXPECTED_API_KEY:
-        logger.warning(f"Unauthorized request: Invalid or missing API key - {api_key}")
-        return JSONResponse(
-            status_code=403,
-            content={
-                "status": False,
-                "message": "Forbidden: Invalid API Key",
-                "status_code": 403,
-                "data": None
-            }
-        )
+        else:
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "status": False,
+                    "message": "Forbidden: Invalid Signature",
+                    "status_code": 403,
+                    "data": None
+                }
+            )
+    else:
+        api_key = request.headers.get("x-api-key")
+        if not api_key or api_key != EXPECTED_API_KEY:
+            logger.warning(f"Unauthorized request: Invalid or missing API key - {api_key}")
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "status": False,
+                    "message": "Forbidden: Invalid API Key",
+                    "status_code": 403,
+                    "data": None
+                }
+            )
+        else:
+            return await call_next(request)
 
-    return await call_next(request)
 
 def lambda_handler(event, context):
     print(f"Received event: {json.dumps(event, indent=2)}")

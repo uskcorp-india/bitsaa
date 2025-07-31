@@ -30,7 +30,7 @@ async def update(registration_id,request: Request):
     request_body = await request.json()
     updated_registration = registration_handler.update(registration_id,request_body)
     if updated_registration:
-        return registration_handler
+        return updated_registration
     raise HTTPException(status_code=400, detail="Failed to update registration")
 
 @router.delete("")

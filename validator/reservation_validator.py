@@ -1,5 +1,7 @@
 from schema import Schema, And, Optional, SchemaError
-from utils.validator_utils import is_string_or_none
+from utils.validator_utils import is_string_or_none, is_int_or_none
+
+
 def validate(reservation: dict) -> dict:
     errors = []
 
@@ -10,7 +12,11 @@ def validate(reservation: dict) -> dict:
         Optional('status'): And(is_string_or_none, len, error="Field 'status' should be a non-empty string"),
         Optional('transaction_id'): And(is_string_or_none, len, error="Field 'id' should be a non-empty string"),
         Optional('created_at'): And(is_string_or_none, len, error="Field 'created_at' should be a non-empty string"),
-        Optional('extra_bed'):And(bool, error="Field should be type of bool")
+        Optional('extra_bed'):And(bool, error="Field should be type of bool"),
+        Optional('room_count'):And (is_int_or_none, error="Field 'room_count' should be a non-empty int"),
+        Optional('check_in'):And(is_string_or_none, len, error="Field 'check_in' should be a non-empty string"),
+        Optional('check_out'): And(is_string_or_none, len, error="Field 'check_out' should be a non-empty string"),
+        Optional('total_cost'): And(is_string_or_none, len, error="Field 'total_cost' should be a non-empty string")
 
     }
 

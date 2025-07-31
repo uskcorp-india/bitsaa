@@ -1,4 +1,5 @@
 import dynamodb.dynamodb_proxy as db
+from utils.email_utils import send_welcome_email
 from utils.logger_factory import get_logger
 import validator.registration_validator as validator
 from utils.response_utils import build_response
@@ -12,6 +13,7 @@ def create(registration: dict):
         return build_response(validated_registration['errors'],400)
     else:
         response = db.create_registration(validated_registration)
+        send_welcome_email(registration.get("registrantEmail"), registration.get("registrantName"))
         return build_response(response,'registration Created Successfully')
 
 

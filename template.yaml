@@ -72,10 +72,10 @@ Resources:
       Environment:
         Variables:
           TZ: Asia/Kolkata
-          IMAP_SERVER: "mail.uskcorp.in"
-          IMAP_PORT: "993"
-          EMAIL_USER: "hr@uskcorp.in"
-          EMAIL_PASSWORD: "Infosys@123"
+          IMAP_SERVER: "smpt.gmail.com"
+          IMAP_PORT: 465
+          EMAIL_USER: "bgm-vendor@bitsaa.org"
+          EMAIL_PASSWORD: "Bitsaa@123"
 
   CloudWatchPolicy:
     Type: AWS::IAM::Policy

@@ -58,6 +58,40 @@ def update(dynamodb, resort_id: str, resort: dict):
     logger.info(f"Updated resort with ID {resort_id} successfully")
     return response.get("Attributes", {})
 
+@with_connection
+def increment_blocked_room(dynamodb, resort_id: str, count: int):
+    table = dynamodb.Table(common.RESORT)
+    try:
+        table.update_item(
+            Key={'id': resort_id},
+            UpdateExpression='''
+                SET blocked_rooms = if_not_exists(blocked_rooms, :zero) + :inc,
+                    available = available - :inc
+            ''',
+            ConditionExpression='available >= :inc',
+            ExpressionAttributeValues={
+                ':inc': count,
+                ':zero': 0
+            }
+        )
+    except dynamodb.meta.client.exceptions.ConditionalCheckFailedException:
+        raise ValueError(f"Not enough available rooms to block {count} rooms for resort {resort_id}")
+
+@with_connection
+def decrement_blocked_room(dynamodb, resort_id: str, count: int):
+    table = dynamodb.Table(common.RESORT)
+    try:
+        table.update_item(
+            Key={'id': resort_id},
+            UpdateExpression='SET blocked_rooms = if_not_exists(blocked_rooms, :zero) - :dec',
+            ConditionExpression='blocked_rooms >= :dec OR attribute_not_exists(blocked_rooms)',
+            ExpressionAttributeValues={
+                ':dec': count,
+                ':zero': 0
+            }
+        )
+    except dynamodb.meta.client.exceptions.ConditionalCheckFailedException:
+        raise ValueError(f"Cannot decrement {count} rooms for resort {resort_id}: insufficient blocked_rooms")
 
 @with_connection
 def delete(dynamodb, resort_id: str):

@@ -14,6 +14,7 @@ def create(registration: dict):
     else:
         response = db.create_registration(validated_registration)
         send_welcome_email(registration.get("registrantEmail"), registration.get("registrantName"))
+        print(f"message++++++++++++++++=  {send_welcome_email(registration.get("registrantEmail"), registration.get("registrantName"))}" )
         return build_response(response,'registration Created Successfully')
 
 

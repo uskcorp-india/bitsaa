@@ -1,15 +1,16 @@
 import os
+import smtplib
 from email.message import EmailMessage
 import aiosmtplib
 
 
 
-async def send_welcome_email(recipient_email: str, first_name: str):
+def send_welcome_email(recipient_email: str, first_name: str):
     message = EmailMessage()
-    message["From"] = os.environ.get("EMAIL_USER")
+    message["From"] = os.getenv("EMAIL_USER")
     message["To"] = recipient_email
     message["Subject"] = "🎉 Welcome to BGM 2026 – Let’s Get You Settled!"
-
+    print(f"message++++++  {message}")
     body = f"""
     <html>
     <body>
@@ -40,13 +41,13 @@ async def send_welcome_email(recipient_email: str, first_name: str):
     """
     message.add_alternative(body, subtype="html")
 
-    await aiosmtplib.send(
-        message,
-        hostname=os.environ["IMAP_SERVER"],
-        port=os.environ["IMAP_PORT"],
-        username=os.environ["EMAIL_USER"],
-        password=os.environ["EMAIL_PASSWORD"]
-    )
+    try:
+        with smtplib.SMTP_SSL(os.getenv("IMAP_SERVER"), 465) as server:
+            server.login(os.getenv("EMAIL_USER"), os.getenv("EMAIL_PASSWORD"))
+            server.send_message(message)
+            print(f"Confirmation email sent to {recipient_email}")
+    except Exception as e:
+        print(f"Failed to send confirmation email: {e}")
 
 
 # 🏨 Hotel Booking Confirmation Email
@@ -82,7 +83,7 @@ async def send_booking_confirmation_email(reservation_data: dict):
     <strong>Registrant Name:</strong> {registration_data[0]['first_name']} {registration_data[0]['last_name']}<br>
     <strong>Group Members:</strong><br>
     •<strong>[1]</strong> {registration_data[0]['first_name']} {registration_data[0]['last_name']} (Registrant)<br>
-    {"".join([f"•<strong>[{i+2}]</strong> {reg['first_name']} {reg['last_name']}<br>" for i, reg in enumerate(registration_data[1:])])}
+    {"".join([f" {reg['first_name']} {reg['last_name']}<br>" for i, reg in enumerate(registration_data[1:])])}
     <strong>Total Rooms Booked:</strong> {reservation_data['room_count']}<br>
     <strong>Hotel Name:</strong> {reservation_data['resort']['name']}<br>
     <strong>Room Type(s):</strong> {reservation_data['resort']['category']}<br>

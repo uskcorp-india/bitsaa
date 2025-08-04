@@ -5,7 +5,7 @@ import aiosmtplib
 
 
 
-def send_welcome_email(recipient_email: str, first_name: str):
+def send_welcome_email(recipient_email: str, first_name: str, order_id: str, ticket_count: int):
     message = EmailMessage()
     message["From"] = os.getenv("EMAIL_USER")
     message["To"] = recipient_email
@@ -30,6 +30,8 @@ def send_welcome_email(recipient_email: str, first_name: str):
     Following these steps will ensure that your stay is comfortably arranged and you're all set to experience the magic of BGM hassle-free.<br><br>
 
     Need help? Reach out to <a href="mailto:bgm-communications@bitsaa.org">bgm-communications@bitsaa.org</a>.<br><br>
+    
+    <a href = "https://bgm2026.com/registration?{order_id}/{ticket_count}">click here for booking </a>
 
     See you in Hyderabad!<br><br>
 

@@ -10,36 +10,74 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
     message["From"] = os.getenv("EMAIL_USER")
     message["To"] = recipient_email
     message["Subject"] = "🎉 Welcome to BGM 2026 – Let’s Get You Settled!"
+    message['X-Priority'] = '1'
+    message['X-MSMail-Priority'] = 'High'
+    message['Importance'] = 'High'
     print(f"message++++++  {message}")
     body = f"""
-    <html>
-    <body>
-    Hi {first_name},<br><br>
+    <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to BGM 2026</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6;">
+  <p>Hi <strong>{first_name}</strong>,</p>
 
-    🎉<strong>Congratulations – your registration for <strong>BITSAA Global Meet 2026</strong> is confirmed!</strong><br><br>
+  <p><strong>Congratulations – your registration for <em>BITSAA Global Meet 2026</em> is confirmed! 🎊</strong></p>
 
-    We're thrilled to have you on board for three unforgettable days of connection, inspiration, and nostalgia at the <strong>BITS Hyderabad Campus</strong> from <strong>January 9–11, 2026</strong>.<br><br>
+  <p>We’re thrilled to have you on board for three unforgettable days of connection, inspiration, and nostalgia at the <strong>BITS Hyderabad Campus from January 9–11, 2026</strong>.</p>
 
-    <strong>How to Book Your Accommodation:</strong>
-    <ol>
-      <li><strong>STEP 1</strong>: XYZ – Fill out the accommodation form with your registration ID</li>
-      <li><strong>STEP 2</strong>: ABC – Choose your room category based on your group size or preference</li>
-      <li><strong>STEP 3</strong>: UPO – Upload proof of payment or confirm your booking</li>
-    </ol>
+  <p>Now that you've taken the first step, it's time to complete your BGM journey by booking your accommodation. To make this process smooth, please follow the simple steps below:</p>
+  <hr>
+  <h3>🛏️ How to Book Your Accommodation:</h3>
 
-    Following these steps will ensure that your stay is comfortably arranged and you're all set to experience the magic of BGM hassle-free.<br><br>
+  <p style="margin-bottom: 12px;">
+  <strong>STEP 1: XYZ</strong><br>
+  Fill out the accommodation form with your registration ID.
+</p>
 
-    Need help? Reach out to <a href="mailto:bgm-communications@bitsaa.org">bgm-communications@bitsaa.org</a>.<br><br>
-    
-    <a href = "https://bgm2026.com/registration?{order_id}/{ticket_count}">click here for booking </a>
+<p style="margin-bottom: 12px;">
+  <strong>STEP 2: ABC</strong><br>
+  Choose your room category based on your group size or preference.
+</p>
 
-    See you in Hyderabad!<br><br>
+<p>
+  <strong>STEP 3: UPO</strong><br>
+  Upload proof of payment or confirm your booking.
+</p>
+  <hr>
+  <p>Following these steps will ensure that your stay is comfortably arranged and you're all set to experience the magic of BGM hassle-free.</p>
 
+  <p>If you have any questions or need help, don’t hesitate to reach out to us at 
+    <a href="mailto:bgm-communications@bitsaa.org">bgm-communications@bitsaa.org</a>.
+  </p><br>
+  
+  <a href="https://bgm2026.com/registration/?order_id={order_id}&ticket_count={ticket_count}" 
+   style="
+     display: inline-block;
+     padding: 12px 24px;
+     background-color: #007BFF;
+     color: white;
+     text-decoration: none;
+     border-radius: 8px;
+     font-size: 16px;
+     width: 180px;
+     text-align: center;">
+  Click here for booking
+</a>
+
+
+  <p>See you in Hyderabad!</p>
+
+  <p>
     Warm regards,<br>
-    <strong>Team BGM 2026</strong><br>
-    Network • Navigate • Nostalgia
-    </body>
-    </html>
+    <strong style="font-size: 14px";>Team BGM 2026</strong><br>
+    <em>Network • Navigate • Nostalgia</em>
+  </p>
+</body>
+</html>
+
     """
     message.add_alternative(body, subtype="html")
 

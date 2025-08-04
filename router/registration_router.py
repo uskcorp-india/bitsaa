@@ -24,7 +24,6 @@ async def create(request: Request, background_tasks: BackgroundTasks):
         request_body['registration_no'] = request_body.get("ticketId")
         create_registration = registration_handler.create(request_body)
         logger.info(create_registration)
-
         if create_registration:
             return create_registration
         raise HTTPException(status_code=400, detail="Failed to create registration")
@@ -32,7 +31,7 @@ async def create(request: Request, background_tasks: BackgroundTasks):
         first_name = request_body.get("userName", "Guest").split()[0]
         recipient_email = request_body.get("userEmail")
         order_id = request_body.get("orderId")
-        ticket_count = request_body.get("ticketCount", 1)
+        ticket_count = request_body.get("ticketCount")
         background_tasks.add_task(
             send_welcome_email, recipient_email, first_name, order_id, ticket_count
         )

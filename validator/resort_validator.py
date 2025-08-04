@@ -7,6 +7,7 @@ def validate(resort: dict) -> dict:
     field_validators = {
         Optional('id'): And(is_string_or_none, len, error="Field 'id' must be a non-empty string"),
         'name': And(is_string_or_none, len, error="Field 'name' must be a non-empty string"),
+        'extra_bed_price':And(int, lambda n: n > 0,error="Field 'extra_bed_price' must be a positive integer"),
         'category': And(str, len, error="Field 'category' must be a non-empty string"),
         'available': And(int, lambda n: n > 0,error="Field 'available' must be a positive integer (rooms must be available)"),
         'price':And(int, error="Field 'maxPersonAllowed' must be a positive integer"),

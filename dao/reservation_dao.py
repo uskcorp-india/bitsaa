@@ -26,6 +26,7 @@ def pending_reservation(dynamodb, reservation_id):
     table.put_item(Item=item)
     logger.info("Created reservation successfully")
     return item
+
 @with_connection
 def delete_from_pending_reservation(dynamodb, reservation_id: str):
     table = dynamodb.Table(common.PENDING_RESERVATION)

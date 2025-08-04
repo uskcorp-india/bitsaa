@@ -83,15 +83,17 @@ def decrement_blocked_room(dynamodb, resort_id: str, count: int):
     try:
         table.update_item(
             Key={'id': resort_id},
-            UpdateExpression='SET blocked_rooms = if_not_exists(blocked_rooms, :zero) - :dec',
-            ConditionExpression='blocked_rooms >= :dec OR attribute_not_exists(blocked_rooms)',
+            UpdateExpression='SET blocked_rooms = blocked_rooms - :dec',
+            ConditionExpression='attribute_exists(blocked_rooms) AND blocked_rooms >= :dec',
             ExpressionAttributeValues={
-                ':dec': count,
-                ':zero': 0
+                ':dec': count
             }
         )
     except dynamodb.meta.client.exceptions.ConditionalCheckFailedException:
-        raise ValueError(f"Cannot decrement {count} rooms for resort {resort_id}: insufficient blocked_rooms")
+        raise ValueError(
+            f"Cannot decrement {count} rooms for resort {resort_id}: "
+            f"'blocked_rooms' does not exist or has insufficient value"
+        )
 
 @with_connection
 def delete(dynamodb, resort_id: str):

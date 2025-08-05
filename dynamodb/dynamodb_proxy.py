@@ -15,6 +15,11 @@ def delete_reservation(reservation_id:str):
 def find_reservation(reservation_id:str):
     return reservation_dao.find(reservation_id)
 
+def pending_reservation(reservation_id:str):
+    return reservation_dao.pending_reservation(reservation_id)
+
+def delete_from_pending_reservation(reservation_id:str):
+    return reservation_dao.delete_from_pending_reservation(reservation_id)
 #registration
 def create_registration(registration:dict):
     return registration_dao.create(registration)

@@ -1,4 +1,5 @@
 import dynamodb.dynamodb_proxy as db
+from utils.email_utils import send_welcome_email
 from utils.logger_factory import get_logger
 import validator.registration_validator as validator
 from utils.response_utils import build_response

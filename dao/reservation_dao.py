@@ -1,3 +1,5 @@
+import datetime
+
 from dynamodb.connection import with_connection
 from utils.logger_factory import get_logger
 from utils.dao_utils import build_record
@@ -13,6 +15,24 @@ def create(dynamodb, reservation:dict):
     table.put_item(Item=reservation)
     logger.info("Created reservation successfully")
     return reservation
+
+@with_connection
+def pending_reservation(dynamodb, reservation_id):
+    table = dynamodb.Table(common.PENDING_RESERVATION)
+    item = {
+        'id': reservation_id,
+        'created_at': datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    }
+    table.put_item(Item=item)
+    logger.info("Created reservation successfully")
+    return item
+
+@with_connection
+def delete_from_pending_reservation(dynamodb, reservation_id: str):
+    table = dynamodb.Table(common.PENDING_RESERVATION)
+    table.delete_item(Key={"id": reservation_id})
+    logger.info(f"Deleted {common.PENDING_RESERVATION} successfully '{reservation_id}'")
+    return {"action_type": f"{common.PENDING_RESERVATION} deleted", "id": reservation_id}
 
 @with_connection
 def find(dynamodb, reservation_id: str):

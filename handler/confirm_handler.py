@@ -1,5 +1,6 @@
 import dynamodb.dynamodb_proxy as db
 from dao.resort_dao import decrement_blocked_room
+from utils.email_utils import send_booking_confirmation_email
 from utils.logger_factory import get_logger
 import validator.confirm_validator as validator
 from utils.response_utils import build_response
@@ -24,6 +25,7 @@ def create(reservation_id: str,confirm: dict):
         reservation['status'] = "Confirm"
         reservation['transaction_id'] = confirm.get("confirm_details", {}).get("transaction_id")
         reservation['confirm_details'] = validated_reservation['confirm_details']
+        send_booking_confirmation_email(reservation)
         db.update_reservation(reservation_id, reservation)
         for registration in reservation['registration']:
             registration = db.find_registration(registration['id'])

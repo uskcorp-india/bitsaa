@@ -93,7 +93,7 @@ def send_booking_confirmation_email(reservation_data:dict):
     message["From"] = os.getenv("EMAIL_USER")
     message["To"] = reservation_data.get('registration')[0]['email']
     message["Subject"] = "🏨 Your BGM 2026 Hotel Booking is Confirmed!"
-    print(f"message++++++  {message}")
+
 
     registration_data = reservation_data.get('registration', [])
 

@@ -15,8 +15,9 @@ def create(reservation: dict):
         resort_id = reservation.get('resort')['id']
         count = reservation['room_count']
         resort = db.find_resort(resort_id)
+        print(f"resort_++++++++++ {resort}")
         available_rooms = int(resort['available'])
-        if available_rooms <= count:
+        if available_rooms < count:
             return build_response(reservation,f"Only {available_rooms} rooms are available, but your trying to book {count} room.")
         reservation_data = db.create_reservation(reservation_validator)
         increment_blocked_room(resort_id,count)

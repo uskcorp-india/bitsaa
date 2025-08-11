@@ -18,7 +18,7 @@ def create(reservation_id: str,confirm: dict):
         booking_room = int(reservation.get("room_count"))
         resort = db.find_resort(reservation['resort']['id'])
         available_rooms = int(resort['available'])
-        if available_rooms <= booking_room:
+        if available_rooms < booking_room:
             return build_response(reservation, f"Only {available_rooms} rooms are available, but your trying to book {booking_room} room.")
         db.update_resort(reservation['resort']['id'], resort)
         decrement_blocked_room(reservation['resort']['id'], booking_room)

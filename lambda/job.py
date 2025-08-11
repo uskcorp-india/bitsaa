@@ -30,8 +30,8 @@ def lambda_handler(event, context):
             print(f"[WARN] Invalid date format: {created_at_str}")
             continue
 
-        # 2. Check if older than 10 minutes
-        if (now - created_at).total_seconds() > 600:
+        # 2. Check if older than 30 minutes
+        if (now - created_at).total_seconds() > 3000:
             try:
                 # 3. Fetch reservation by ID
                 reservation = reservation_table.get_item(Key={'id': pending_id}).get('Item')

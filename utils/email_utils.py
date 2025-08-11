@@ -91,7 +91,8 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
 def send_booking_confirmation_email(reservation_data:dict):
     message = EmailMessage()
     message["From"] = os.getenv("EMAIL_USER")
-    message["To"] = reservation_data.get('registration')[0]['email']
+    recipient_email = reservation_data.get('registration')[0]['email']
+    message["To"] = ", ".join([recipient_email, os.getenv("EMAIL_USER")])
     message["Subject"] = "🏨 Your BGM 2026 Hotel Booking is Confirmed!"
 
 
@@ -125,11 +126,11 @@ def send_booking_confirmation_email(reservation_data:dict):
      <ul style="list-style-type: circle">
         {group_info}
     </ul>
-    <li><b>Total Rooms Booked:</b>{reservation_data['room_count']}</li>
+    <li><b>Total Rooms Booked:</b> {reservation_data['room_count']}</li>
     <li><b>Hotel Name:</b> {reservation_data['resort']['name']}</li>
-    <li><b>Room Type(s):</b>{reservation_data['resort']['category']}</li>
+    <li><b>Room Type(s):</b> {reservation_data['resort']['category']}</li>
     <li><b>Check-In Date:</b> {reservation_data['check_in']}</li>
-    <li><b>Check-Out Date:</b>{reservation_data['check_out']}</li><br>
+    <li><b>Check-Out Date:</b> {reservation_data['check_out']}</li><br>
     </ul>
     </div>
     <hr><br>

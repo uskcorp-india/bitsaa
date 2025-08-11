@@ -31,23 +31,22 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
   <hr>
   <h3>🛏️ How to Book Your Accommodation:</h3>
 
-  <p style="margin-bottom: 12px;">
-  <strong>STEP 1: XYZ</strong><br>
-  Fill out the accommodation form with your registration ID.
-</p>
-
 <p style="margin-bottom: 12px;">
-  <strong>STEP 2: ABC</strong><br>
-  Choose your room category based on your group size or preference.
+<strong>STEP 1</strong>: REGISTER YOUR STAY<br>
+   Fill out the check-in and check-out dates from the dropdown in the form.
 </p>
-
+<p style="margin-bottom: 12px;">
+<strong>STEP 2</strong>: CHOOSE YOUR ACCOMMODATION<br>
+  Choose your preferred hotel and room type based on comfort, group size, or preference.<br>
+   Each room includes one extra bed facility for added convenience.
+</p>
 <p>
-  <strong>STEP 3: UPO</strong><br>
-  Upload proof of payment or confirm your booking.
+ <strong>STEP 3</strong>:CONFIRM YOUR BOOKING<br>
+  Specify the number of rooms required <br>
+  Enter registration id for each and click “Submit” to finalise yo  ur booking.
 </p>
   <hr>
   <p>Following these steps will ensure that your stay is comfortably arranged and you're all set to experience the magic of BGM hassle-free.</p>
-
   <p>If you have any questions or need help, don’t hesitate to reach out to us at 
     <a href="mailto:bgm-communications@bitsaa.org">bgm-communications@bitsaa.org</a>.
   </p><br>

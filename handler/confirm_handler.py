@@ -32,4 +32,4 @@ def create(reservation_id: str,confirm: dict):
             registration['Item']['reservation_id'] = reservation_id
             db.update_registration(registration['Item']['id'], registration['Item'])
         db.delete_from_pending_reservation(reservation_id)
-        return build_response(reservation, 'registration Created Successfully')
+        return build_response(reservation, 'Registration Created Successfully')

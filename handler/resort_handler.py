@@ -14,12 +14,12 @@ def create(resort_data: dict):
         return build_response(resort_validator['errors'],400)
     else:
         response = db.create_resort(resort_validator)
-        return build_response(response,'resort Created Successfully')
+        return build_response(response,'Resort Created Successfully')
 
 def find(resort_id: str):
     response = db.find_resort(resort_id)
     logger.info(response)
-    return build_response(response,"resort Found Successfully")
+    return build_response(response,"Resort Found Successfully")
 
 def find_all():
     response = db.find_all_resorts()
@@ -34,9 +34,9 @@ def update(resort_id: str,resort: dict):
         return build_response(validated_resort['errors'], 400)
     else:
         response = db.update_resort(resort_id,validated_resort)
-        return build_response(response, 'resort Updated Successfully')
+        return build_response(response, 'Resort Updated Successfully')
 
 def delete(resort_id:str):
     response=db.delete_resort(resort_id)
     logger.info(response)
-    return build_response(response,message="resort deleted successfully")
+    return build_response(response,message="Resort deleted successfully")

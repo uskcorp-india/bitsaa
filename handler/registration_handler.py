@@ -1,5 +1,4 @@
 import dynamodb.dynamodb_proxy as db
-from utils.email_utils import send_welcome_email
 from utils.logger_factory import get_logger
 import validator.registration_validator as validator
 from utils.response_utils import build_response
@@ -13,7 +12,7 @@ def create(registration: dict):
         return build_response(validated_registration['errors'],400)
     else:
         response = db.create_registration(validated_registration)
-        return build_response(response,'registration Created Successfully')
+        return build_response(response,'Registration Created Successfully')
 
 
 def find(registration_id: str):
@@ -22,16 +21,16 @@ def find(registration_id: str):
         if response['Item'].get('reservation_id'):
             logger.info(response)
             return build_response({}, "Registration already completed")
-        return build_response(response['Item'],"registration Found Successfully")
+        return build_response(response['Item'],"Registration Found Successfully")
     else:
         logger.info(response)
-        return build_response({},"registration not Found")
+        return build_response({},"Registration Not Found")
 
 
 def registration_exists(registration_id: str):
     response = db.registration_exists(registration_id)
     logger.info(response)
-    return build_response(response,"registration Found Successfully")
+    return build_response(response,"Registration Found Successfully")
 
 def update(registration_id: str,registration: dict):
     validated_registration = validator.validate(registration)
@@ -41,9 +40,9 @@ def update(registration_id: str,registration: dict):
         return build_response(validated_registration['errors'], 400)
     else:
         response = db.update_registration(registration_id,registration)
-        return build_response(response, 'registration Updated Successfully')
+        return build_response(response, 'Registration Updated Successfully')
 
 def delete(registration_id:str):
     response=db.delete_registration(registration_id)
     logger.info(response)
-    return build_response(response,message="registration deleted successfully")
+    return build_response(response,message="Registration deleted successfully")

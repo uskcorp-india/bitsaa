@@ -22,12 +22,12 @@ def create(reservation: dict):
         reservation_data = db.create_reservation(reservation_validator)
         increment_blocked_room(resort_id,count)
         db.pending_reservation(reservation_data['id'])
-        return build_response(reservation_data,'reservation Created Successfully')
+        return build_response(reservation_data,'Reservation Created Successfully')
 
 def find(reservation_id: str):
     response = db.find_reservation(reservation_id)
     logger.info(response)
-    return build_response(response,"reservation Found Successfully")
+    return build_response(response,"Reservation Found Successfully")
 
 def update(reservation_id,reservation: dict):
     validated_reservation = validator.validate(reservation)
@@ -37,9 +37,9 @@ def update(reservation_id,reservation: dict):
         return build_response(validated_reservation['errors'], 400)
     else:
         response = db.update_reservation(reservation_id,validated_reservation)
-        return build_response(response, 'reservation Updated Successfully')
+        return build_response(response, 'Reservation Updated Successfully')
 
 def delete(reservation_id:str):
     response=db.delete_reservation(reservation_id)
     logger.info(response)
-    return build_response(response,message="reservation deleted successfully")
+    return build_response(response,message="Reservation deleted successfully")

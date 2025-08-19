@@ -23,7 +23,7 @@ Parameters:
 
   LambdaRoleArn:
     Type: String
-    Default: arn:aws:iam::785000992152:role/BitsaRole
+    Default: arn:aws:iam::971528320681:role/BitsaaRole
     Description: IAM Role ARN for Lambda execution
 
 Resources:
@@ -96,7 +96,7 @@ Resources:
     Properties:
       PolicyName: !Sub "CloudWatchLogsPolicy"
       Roles:
-        - BitsaRole
+        - BitsaaRole
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

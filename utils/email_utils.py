@@ -89,7 +89,7 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
 
 def send_booking_confirmation_email(reservation_data:dict):
     message = EmailMessage()
-    message["From"] =  os.getenv("EMAIL_USER"),''
+    message["From"] =  os.getenv("EMAIL_USER")
     recipient_email = reservation_data.get('registration')[0]['registrantEmail']
     message["To"] = ", ".join([recipient_email, message["From"]])
     message["Subject"] = "🏨 Your BGM 2026 Hotel Booking is Confirmed!"

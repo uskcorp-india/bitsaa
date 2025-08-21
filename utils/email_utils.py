@@ -21,9 +21,9 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
   <title>Welcome to BGM 2026</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6;">
-  <p>Hi <strong>{first_name}</strong>,</p>
+  <p>Hi {first_name},</p>
 
-  <p><strong>Congratulations – your registration for <em>BITSAA Global Meet 2026</em> is confirmed! 🎊</strong></p>
+  <p>Congratulations – your registration for <strong>BITSAA Global Meet 2026</strong> is confirmed! 🎊</p>
 
   <p>We’re thrilled to have you on board for three unforgettable days of connection, inspiration, and nostalgia at the <strong>BITS Hyderabad Campus from January 9–11, 2026</strong>.</p>
 
@@ -89,9 +89,9 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
 
 def send_booking_confirmation_email(reservation_data:dict):
     message = EmailMessage()
-    message["From"] = os.getenv("EMAIL_USER")
-    recipient_email = reservation_data.get('registration')[0]['email']
-    message["To"] = ", ".join([recipient_email, os.getenv("EMAIL_USER")])
+    message["From"] =  os.getenv("EMAIL_USER"),''
+    recipient_email = reservation_data.get('registration')[0]['registrantEmail']
+    message["To"] = ", ".join([recipient_email, message["From"]])
     message["Subject"] = "🏨 Your BGM 2026 Hotel Booking is Confirmed!"
     total_cost = int(reservation_data['total_cost'].strip('"').strip())
     formatted_cost = f"₹{total_cost:,.0f}"
@@ -99,9 +99,9 @@ def send_booking_confirmation_email(reservation_data:dict):
 
     registration_data = reservation_data.get('registration', [])
 
-    if len(registration_data) > 1:
+    if len(registration_data) >= 1:
         group_members = [
-            f"{reg.get('first_name', '')} {reg.get('last_name', '')}".strip()
+            f"{reg.get('registrantName', '')}".strip()
             for reg in registration_data
         ]
         members_list = f"<li> {group_members[0]} (Registrant) </li>"
@@ -115,10 +115,10 @@ def send_booking_confirmation_email(reservation_data:dict):
     <body>
      <!-- Logo -->
     <div style="text-align: left; margin-bottom: 10px;">
-      <img src="https://bitsaa.d9events.in/wp-content/uploads/2025/08/d9_EVENTS_LOGO.png"  alt="BGM 2026 Logo" style="max-height:50px;">
+      <img src="https://bitsaa.d9events.in/wp-content/uploads/2025/08/d9_EVENTS_LOGO.png"  alt="BGM 2026 Logo" style="max-height:100px;">
     </div>
     
-    <p>Hi {reservation_data.get('registration')[0] ['first_name'] } {reservation_data.get('registration')[0] ['last_name']},</p>
+    <p>Hi {reservation_data.get('registration')[0]['registrantName'] },</p>
 
 <p>We’re delighted to let you know that your <strong>accommodation for BITSAA Global Meet 2026</strong><br> has been successfully booked! 🥳<br>&nbsp;Your stay is now secured, and you're one step closer to experiencing an exciting and <br>memorable three-day celebration at the <strong>BITS Hyderabad Campus from January 9–11, 2026</strong>.
 </p>
@@ -127,19 +127,16 @@ def send_booking_confirmation_email(reservation_data:dict):
    <div style="line-height: 1.9;">
 <h3><b>📌 Reservation Summary</b></h3>
 <ul>
-    <li><b>Registrant Name:</b> {registration_data[0]['first_name']} {registration_data[0]['last_name']}</li>
-    <li><b>Group Members:</b></li>
-     <ul style="list-style-type: circle">
-        {group_info}
-    </ul>
-    <li><b>reservation id:</b> {reservation_data['id']}</li>
+    <li><b>Registrant Name:</b> {registration_data[0]['registrantName']}</li>
+    {group_info}
+    <li><b>Reservation id:</b> {reservation_data['id']}</li>
     <li><b>Payment Ref:</b> {reservation_data['transaction_id']}</li>
     <li><b>Total Rooms Booked:</b> {reservation_data['room_count']}</li>
     <li><b>Hotel Name:</b> {reservation_data['resort']['name']}</li>
     <li><b>Room Type(s):</b> {reservation_data['resort']['category']}</li>
     <li><b>Check-In Date:</b> {reservation_data['check_in']}</li>
     <li><b>Check-Out Date:</b> {reservation_data['check_out']}</li>
-    <li><b>total cost:</b> {formatted_cost}</li><br>
+    <li><b>Total cost:</b> {formatted_cost}</li><br>
     </ul>
     </div>
     <hr><br>
@@ -151,7 +148,7 @@ def send_booking_confirmation_email(reservation_data:dict):
     <b>Team BGM 2026</b><br>
    <i>Network • Navigate • Nostalgia</i>
    <p>Contact Us Anytime<br>
-   Phone:<a href="tel:+919700242473">+919700242473</a>/<a href="tel:+919898476944">+919898476944</a></p>
+   Phone: <a href="tel: +919700242473">+919700242473</a> / <a href="tel:+919898476944">+919898476944</a></p>
     </body>
     </html>
     """
@@ -161,6 +158,6 @@ def send_booking_confirmation_email(reservation_data:dict):
         with smtplib.SMTP_SSL(os.getenv("IMAP_SERVER"), 465) as server:
             server.login(os.getenv("EMAIL_USER"), os.getenv("EMAIL_PASSWORD"))
             server.send_message(message)
-            print(f"Booking Confirmation email sent to { reservation_data.get('registration')[0]['email']}")
+            print(f"Booking Confirmation email sent to { reservation_data.get('registration')[0]['registrantEmail']}")
     except Exception as e:
         print(f"Failed to send booking confirmation email: {e}")

@@ -78,10 +78,10 @@ def increment_blocked_room(dynamodb, resort_id: str, count: int):
         raise ValueError(f"Not enough available rooms to block {count} rooms for resort {resort_id}")
 
 @with_connection
-def decrement_blocked_room(dynamodb, resort_id: str, count: int):
+async def decrement_blocked_room(dynamodb, resort_id: str, count: int):
     table = dynamodb.Table(common.RESORT)
     try:
-        table.update_item(
+        await table.update_item(
             Key={'id': resort_id},
             UpdateExpression='SET blocked_rooms = blocked_rooms - :dec',
             ConditionExpression='attribute_exists(blocked_rooms) AND blocked_rooms >= :dec',

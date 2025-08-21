@@ -12,7 +12,7 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
     message['X-Priority'] = '1'
     message['X-MSMail-Priority'] = 'High'
     message['Importance'] = 'High'
-    print(f"message++++++  {message}")
+    print(f"Welcome message  {message}")
     body = f"""
     <!DOCTYPE html>
 <html>

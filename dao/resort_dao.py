@@ -81,7 +81,7 @@ def increment_blocked_room(dynamodb, resort_id: str, count: int):
 def decrement_blocked_room(dynamodb, resort_id: str, count: int):
     table = dynamodb.Table(common.RESORT)
     try:
-        table.update_item(
+         table.update_item(
             Key={'id': resort_id},
             UpdateExpression='SET blocked_rooms = blocked_rooms - :dec',
             ConditionExpression='attribute_exists(blocked_rooms) AND blocked_rooms >= :dec',

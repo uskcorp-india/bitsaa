@@ -51,8 +51,8 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
     <a href="mailto:bgm-communications@bitsaa.org">bgm-communications@bitsaa.org</a>.
   </p><br>
   
-  <a href="https://booking.d9events.in/?order_id={order_id}&ticket_count={ticket_count}" 
-   style="
+  <a href="https://booking.d9events.in/registration/?order_id={order_id}&ticket_count={ticket_count}" 
+   style=" 
      display: inline-block;
      padding: 12px 24px;
      background-color: #007BFF;
@@ -115,7 +115,7 @@ def send_booking_confirmation_email(reservation_data:dict):
     <body>
      <!-- Logo -->
     <div style="text-align: left; margin-bottom: 10px;">
-      <img src="https://bitsaa.d9events.in/wp-content/uploads/2025/08/d9_EVENTS_LOGO.png"  alt="BGM 2026 Logo" style="max-height:100px;">
+      <img src="https://booking.d9events.in/wp-content/uploads/2025/08/d9_EVENTS_LOGO.png"  alt="BGM 2026 Logo" style="max-height:100px;">
     </div>
     
     <p>Hi {reservation_data.get('registration')[0]['registrantName'] },</p>

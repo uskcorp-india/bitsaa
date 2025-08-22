@@ -2,8 +2,6 @@ import os
 import smtplib
 from email.message import EmailMessage
 
-
-
 def send_welcome_email(recipient_email: str, first_name: str, order_id: str, ticket_count: int):
     message = EmailMessage()
     message["From"] = os.getenv("EMAIL_USER")
@@ -12,7 +10,7 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
     message['X-Priority'] = '1'
     message['X-MSMail-Priority'] = 'High'
     message['Importance'] = 'High'
-    print(f"Welcome message  {message}")
+    print(f"welcome message sent to  {message}")
     body = f"""
     <!DOCTYPE html>
 <html>
@@ -62,12 +60,9 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
      font-size: 16px;
      width: 180px;
      text-align: center;">
-  Click here for booking
+  Book now
 </a>
-
-
   <p>See you in Hyderabad!</p>
-
   <p>
     Warm regards,<br>
     <strong style="font-size: 14px";>Team BGM 2026</strong><br>
@@ -95,10 +90,7 @@ def send_booking_confirmation_email(reservation_data:dict):
     message["Subject"] = "🏨 Your BGM 2026 Hotel Booking is Confirmed!"
     total_cost = int(reservation_data['total_cost'].strip('"').strip())
     formatted_cost = f"₹{total_cost:,.0f}"
-
-
     registration_data = reservation_data.get('registration', [])
-
     if len(registration_data) >= 1:
         group_members = [
             f"{reg.get('registrantName', '')}".strip()
@@ -153,7 +145,6 @@ def send_booking_confirmation_email(reservation_data:dict):
     </html>
     """
     message.add_alternative(body, subtype="html")
-
     try:
         with smtplib.SMTP_SSL(os.getenv("IMAP_SERVER"), 465) as server:
             server.login(os.getenv("EMAIL_USER"), os.getenv("EMAIL_PASSWORD"))

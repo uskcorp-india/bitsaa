@@ -49,7 +49,7 @@ def send_welcome_email(recipient_email: str, first_name: str, order_id: str, tic
     <a href="mailto:bgm-communications@bitsaa.org">bgm-communications@bitsaa.org</a>.
   </p><br>
   
-  <a href="https://booking.d9events.in/registration/?order_id={order_id}&ticket_count={ticket_count}" 
+  <a href="https://booking.d9events.in/bookings/?order_id={order_id}&ticket_count={ticket_count}" 
    style=" 
      display: inline-block;
      padding: 12px 24px;

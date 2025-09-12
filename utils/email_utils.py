@@ -130,7 +130,10 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
     styles = getSampleStyleSheet()
     style_n = ParagraphStyle("Normal", parent=styles["Normal"], fontSize=10, leading=14)
     style_b = ParagraphStyle("Heading", parent=styles["Heading2"], fontSize=12, spaceAfter=6)
+
     content = []
+
+    # Add logo if exists
     logo_path = os.path.join("logo", "d9_EVENTS_LOGO.webp")
     if os.path.exists(logo_path):
         logo = Image(logo_path, width=100, height=100)
@@ -138,7 +141,10 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
         logo_table.setStyle(TableStyle([("ALIGN", (0, 0), (-1, -1), "CENTER")]))
         content.append(logo_table)
         content.append(Spacer(1, 12))
+
     gst_number = "36BRPPS8791F1ZV"
+
+    # Invoice header
     invoice_info = [
         Paragraph("<b>TAX INVOICE</b>", style_b),
         Paragraph(f"Invoice No: {reservation_data['id']}", style_n),
@@ -156,19 +162,24 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
     ]))
     content.append(header_table)
     content.append(Spacer(1, 12))
+
+    # Reservation info
     check_in = datetime.strptime(reservation_data["check_in"], "%Y-%m-%d")
     check_out = datetime.strptime(reservation_data["check_out"], "%Y-%m-%d")
-    days = (check_out - check_in).days or 1  # at least 1 day
+    days = (check_out - check_in).days or 1
     registrant = reservation_data["registration"][0]
     content.append(Paragraph(f"<b>Invoice To:</b> {registrant['registrantName'].title()}", style_n))
     content.append(Paragraph(f"Check-In: {check_in.strftime('%d-%m-%Y')}", style_n))
     content.append(Paragraph(f"Check-Out: {check_out.strftime('%d-%m-%Y')}", style_n))
     content.append(Spacer(1, 12))
-    room_count = reservation_data["room_count"]
     total_cost = int(reservation_data["total_cost"].strip('"').strip())
-    base_total = round(total_cost / 1.28, 2)
+    room_count = reservation_data["room_count"]
+    days = (check_out - check_in).days or 1
+    gst_rate = 0.12 if total_cost <= 5999 else 0.18
+    service_rate = 0.10
+    base_total = round(total_cost / (1 + service_rate + gst_rate), 2)
     per_day_base = round(base_total / (room_count * days), 2)
-    service_charge = round(base_total * 0.10, 2)
+    service_charge = round(base_total * service_rate, 2)
     gst_amount = round(total_cost - (base_total + service_charge), 2)
     total_amount = total_cost
     resort_text = Paragraph(
@@ -199,10 +210,11 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
     ]))
     content.append(res_table)
     content.append(Spacer(1, 12))
+    cgst = sgst = gst_amount / 2
     tax_data = [
         ["Taxes", "Rate", "Amount"],
-        ["CGST", "9%", f"Rs. {gst_amount/2:.2f}"],
-        ["SGST", "9%", f"Rs. {gst_amount/2:.2f}"],
+        ["CGST", f"{int(gst_rate*100/2)}%", f"Rs. {cgst:.2f}"],
+        ["SGST", f"{int(gst_rate*100/2)}%", f"Rs. {sgst:.2f}"],
         ["Total Taxes", "", f"Rs. {gst_amount:.2f}"],
     ]
     tax_table = Table(tax_data, colWidths=[200, 80, 100])
@@ -235,7 +247,6 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
     content.append(Spacer(1, 24))
     content.append(Paragraph("This is a computer-generated invoice. No signature required.", style_n))
     doc.build(content, onFirstPage=add_page_border, onLaterPages=add_page_border)
-
     buffer.seek(0)
     return buffer.read()
 

@@ -172,14 +172,14 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
     content.append(Spacer(1, 12))
     total_cost = int(reservation_data["total_cost"].strip('"').strip())
     room_count = reservation_data["room_count"]
+    per_day_price = reservation_data["resort"]["price_per_day"]
     days = (check_out - check_in).days or 1
-    gst_rate = 0.12 if total_cost <= 5999 else 0.18
+    gst_rate = 0.12 if per_day_price <= 5999 else 0.18
     service_rate = 0.10
-    base_total = round(total_cost / (1 + service_rate + gst_rate), 2)
-    per_day_base = round(base_total / (room_count * days), 2)
+    base_total = round(per_day_price * room_count * days, 2)
     service_charge = round(base_total * service_rate, 2)
-    gst_amount = round(total_cost - (base_total + service_charge), 2)
-    total_amount = total_cost
+    gst_amount = round((base_total + service_charge) * gst_rate, 2)
+    total_amount = base_total + service_charge + gst_amount
     resort_text = Paragraph(
         f"Hotel: {reservation_data['resort']['name']} - {reservation_data['resort']['category']}",
         style_n,
@@ -189,7 +189,7 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
         [
             resort_text,
             str(room_count),
-            f"Rs. {per_day_base:.2f}",
+            f"Rs. {per_day_price:.2f}",
             f"Rs. {service_charge:.2f}",
             f"Rs. {total_amount:.2f}",
         ],
@@ -252,7 +252,7 @@ def send_booking_confirmation_email(reservation_data: dict):
     message = EmailMessage()
     message["From"] = os.getenv("EMAIL_USER")
     recipient_email = reservation_data.get('registration')[0]['registrantEmail']
-    message["To"] = ", ".join([recipient_email, message["From"]])
+    message["To"] = ", ".join([recipient_email, message["From"], "Info.d9events@gmail.com"])
     message["Subject"] = "🏨 Your BGM 2026 Hotel Booking is Confirmed!"
     total_cost = int(reservation_data['total_cost'].strip('"').strip())
     formatted_cost = f"₹{total_cost:,.0f}"

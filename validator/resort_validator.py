@@ -10,7 +10,8 @@ def validate(resort: dict) -> dict:
         'extra_bed_price':And(int, lambda n: n > 0,error="Field 'extra_bed_price' must be a positive integer"),
         'category': And(str, len, error="Field 'category' must be a non-empty string"),
         'available': And(int, lambda n: n > 0,error="Field 'available' must be a positive integer (rooms must be available)"),
-        'price':And(int, error="Field 'maxPersonAllowed' must be a positive integer"),
+        'price':And(int, error="Field 'price' must be a positive integer"),
+        'price_per_day':And(int, error="Field 'price_per_day' must be a positive integer"),
         'maxPersonAllowed': And(int, lambda n: n > 0, error="Field 'maxPersonAllowed' must be a positive integer"),
     }
     validated_resort = {}

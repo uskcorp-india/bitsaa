@@ -50,10 +50,11 @@ Resources:
           STAGE: !Ref Stage
           EXPECTED_API_KEY: "aB3!k9Lm@zR5qX7wP2eT8vY4dF6#rT1$gH5^VcL9mNpQ2rT8uLz#qW3eXpL9tR6yEwD2mX8qZsT8$mQ#vLp9ZdE7rT2yU5iO0jH7*qN3pVzL9tR6yEwD2mX8q"
           TIKKL_SECRET : "Di47eNI06-d410BF-85I4t9D6424m0sz3h1LmPVv5W8"
+          RAZORPAY_SECRET : "1rWZKTMsOAUdKgwGyFy0DB4D"
           IMAP_SERVER: "smtp.gmail.com"
           IMAP_PORT: 465
           EMAIL_USER: "bgm-vendor@bitsaa.org"
-          EMAIL_PASSWORD: "wkfi todj mouw irhc"
+          EMAIL_PASSWORD: "riyr sjbn xwrn fsav"
       Events:
         CreateRegistration:
           Type: Api

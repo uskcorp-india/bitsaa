@@ -24,7 +24,7 @@ def validate(registration: dict) -> dict:
         Optional('orderTimeUtc'): And(is_string_or_none, len, error="Field 'orderTimeUtc' should be a non-empty string"),
         Optional('registrantName'): And(is_string_or_none, len, error="Field 'registrantName' should be a non-empty string"),
         Optional('registrantEmail'): And(is_string_or_none, lambda s: bool(re.match(
-            r'^[a-zA-Z][a-zA-Z0-9_.+-]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', s
+             r'^[a-zA-Z0-9][a-zA-Z0-9_.+-]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', s
         )), error="Invalid registrantEmail format"),
     }
 

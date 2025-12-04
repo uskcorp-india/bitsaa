@@ -252,7 +252,7 @@ def send_booking_confirmation_email(reservation_data: dict):
     message = EmailMessage()
     message["From"] = os.getenv("EMAIL_USER")
     recipient_email = reservation_data.get('registration')[0]['registrantEmail']
-    message["To"] = ", ".join([recipient_email, message["From"], "Info.d9events@gmail.com"])
+    message["To"] = ", ".join([recipient_email, "bgm-vendor@bitsaa.org", "Info.d9events@gmail.com"])
     message["Subject"] = "🏨 Your BGM 2026 Hotel Booking is Confirmed!"
     total_cost = int(reservation_data['total_cost'].strip('"').strip())
     formatted_cost = f"₹{total_cost:,.0f}"
@@ -306,3 +306,4 @@ def send_booking_confirmation_email(reservation_data: dict):
             print(f"Booking Confirmation email with invoice sent to {recipient_email}")
     except Exception as e:
         print(f"Failed to send booking confirmation email: {e}")
+

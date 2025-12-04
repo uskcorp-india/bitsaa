@@ -4,7 +4,7 @@ Description: bitsa - API Gateway + Lambda + Tikkl Signature Authorizer
 
 Globals:
   Function:
-    Timeout: 500
+    Timeout: 800
     Runtime: python3.12
     Architectures:
       - x86_64

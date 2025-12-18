@@ -174,7 +174,7 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
     room_count = reservation_data["room_count"]
     per_day_price = reservation_data["resort"]["price_per_day"]
     days = (check_out - check_in).days or 1
-    gst_rate = 0.12 if per_day_price <= 5999 else 0.18
+    gst_rate = 0.05 if per_day_price <= 5999 else 0.18
     service_rate = 0.10
     base_total = round(per_day_price * room_count * days, 2)
     service_charge = round(base_total * service_rate, 2)
@@ -211,8 +211,8 @@ def generate_invoice_pdf_bytes(reservation_data: dict) -> bytes:
     cgst = sgst = gst_amount / 2
     tax_data = [
         ["Taxes", "Rate", "Amount"],
-        ["CGST", f"{int(gst_rate*100/2)}%", f"Rs. {cgst:.2f}"],
-        ["SGST", f"{int(gst_rate*100/2)}%", f"Rs. {sgst:.2f}"],
+        ["CGST", f"{(gst_rate * 100 / 2.0)}%", f"Rs. {cgst:.2f}"],
+        ["SGST", f"{(gst_rate * 100 / 2.0)}%", f"Rs. {sgst:.2f}"],
         ["Total Taxes", "", f"Rs. {gst_amount:.2f}"],
     ]
     tax_table = Table(tax_data, colWidths=[200, 80, 100])
